@@ -1,2 +1,3 @@
 go build 
-zip  messiserver.zip messi-server
+zip  messiservers.zip app
+mv messiservers.zip /mnt/c/Users/micha/Desktop

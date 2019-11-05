@@ -9,7 +9,7 @@ import (
 	// "github.com/BurntSushi/toml"
 	"encoding/json"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-lambda-go/events"
+	// "github.com/aws/aws-lambda-go/events"
 
 	"os"
 	"bytes"
@@ -87,8 +87,26 @@ func TopIndex(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintln(w, "Hello from messi-bot")
 }
 
+// MyEvent is
+type MyEvent struct {
+	Name string `json:"name"`
+}
+
+type verify struct{
+	Challenge string `json:"key1"`
+	Token string      `json:"key2"`
+}
+
 // HandleRequest takes in request
-func HandleRequest(ctx context.Context) (string, error) {
+func HandleRequest(ctx context.Context, v map[string]interface{}) (string, error) {
+
+for k,v := range(v){
+	fmt.Printf("key/value: %s/%s\n", k, v)
+}
+
+
+	// fmt.Printf("Event: %T" , v)
+// VerificationEndpoint(v)
 	// var environ tomlConfig
 
 // _, err := toml.DecodeFile("config.toml", &environ)
@@ -96,8 +114,7 @@ func HandleRequest(ctx context.Context) (string, error) {
 // 	log.Fatalf("Threw error %v\n", err)
 // 	return
 // }
-fmt.Println(event)
-return "Hello wonderpet", nil
+return  "huh", nil
 // r := mux.NewRouter()
 // r.HandleFunc("/", TopIndex)
 // if err := http.ListenAndServe(":8080", r); err != nil {
@@ -115,17 +132,10 @@ func main() {
 
 // VerificationEndpoint : (GET /webhook)
 // sent to bot, verifies the request is coming from Facebook.
-func VerificationEndpoint(w http.ResponseWriter, r *http.Request) {
-	challenge := r.URL.Query().Get("hub.challenge")
-	token := r.URL.Query().Get("hub.verify_token")
- 
-	if token == os.Getenv("VERIFY_TOKEN") {
-		w.WriteHeader(200)
-		w.Write([]byte(challenge))
-	} else {
-		w.WriteHeader(404)
-		w.Write([]byte("Error, wrong validation token"))
-	}
+func VerificationEndpoint( v verify) (verify){
+	// challenge := v.Challenge
+	//token := v.Token
+	return v
 }
 
 // MessagesEndpoint : (POST /webhook)
