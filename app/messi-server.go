@@ -5,16 +5,20 @@ import (
 	"log"
 	"net/http"
 	// toml "github.com/pelletier/go-toml"
-	"github.com/gorilla/mux"
-	"github.com/BurntSushi/toml"
+	// "github.com/gorilla/mux"
+	// "github.com/BurntSushi/toml"
 	"encoding/json"
+	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-lambda-go/events"
+
 	"os"
 	"bytes"
+	"context"
 )
 
 const (
 	fbAPI = "https://graph.facebook.com/v2.6/me/messages?access_token=%s"
-	image        = "http://37.media.tumblr.com/e705e901302b5925ffb2bcf3cacb5bcd/tumblr_n6vxziSQD11slv6upo3_500.gif"
+	image = "http://37.media.tumblr.com/e705e901302b5925ffb2bcf3cacb5bcd/tumblr_n6vxziSQD11slv6upo3_500.gif"
 )
 
 // Callback from 
@@ -83,25 +87,34 @@ func TopIndex(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintln(w, "Hello from messi-bot")
 }
 
+// HandleRequest takes in request
+func HandleRequest(ctx context.Context) (string, error) {
+	// var environ tomlConfig
+
+// _, err := toml.DecodeFile("config.toml", &environ)
+// if err != nil{
+// 	log.Fatalf("Threw error %v\n", err)
+// 	return
+// }
+fmt.Println(event)
+return "Hello wonderpet", nil
+// r := mux.NewRouter()
+// r.HandleFunc("/", TopIndex)
+// if err := http.ListenAndServe(":8080", r); err != nil {
+// 	log.Fatal(err)
+// }
+// 	return fmt.Sprintf("Hello %s!", 
+// 	name.Name ), nil
+}
+
 func main() {
-
-var environ tomlConfig
-
-_, err := toml.DecodeFile("config.toml", &environ)
-if err != nil{
-	log.Fatalf("Threw error %v\n", err)
-	return
+	lambda.Start(HandleRequest)
 }
 
-
-	r := mux.NewRouter()
-	r.HandleFunc("/", TopIndex)
-	if err := http.ListenAndServe(":8080", r); err != nil {
-		log.Fatal(err)
-	}
-}
+// Todo: make other GET and Post endpoints as necessary
 
 // VerificationEndpoint : (GET /webhook)
+// sent to bot, verifies the request is coming from Facebook.
 func VerificationEndpoint(w http.ResponseWriter, r *http.Request) {
 	challenge := r.URL.Query().Get("hub.challenge")
 	token := r.URL.Query().Get("hub.verify_token")
